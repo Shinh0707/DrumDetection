@@ -24,7 +24,7 @@
 推論処理は [evaluate.py](evaluate.py) にて実行される。推論の実行時には読み込むモデルのバージョンと、入出力ディレクトリを指定する。
 
 *   **推論の実行・モデル指定方法**: 
-    ファイル末尾の `if __name__ == "__main__":` ブロック内で、変数 `model_ver` に読み込みたいモデルのバージョン名(models以下)（例: `dualnorm_allnorm_v14`[see](/models/dualnorm_allnorm_v14)）を指定する。これにより、`models/[バージョン名]/best.pth` が自動的にロードされる。
+    ファイル末尾の `if __name__ == "__main__":` ブロック内で、変数 `model_ver` に読み込みたいモデルのバージョン名(models以下)（例: `dualnorm_allnorm_v14`[🔗](/models/dualnorm_allnorm_v14)）を指定する。これにより、`models/[バージョン名]/best.pth` が自動的にロードされる。
     1. 同一ブロック内の `input_dir` に推論対象の音声が含まれるディレクトリパスを指定する。
     2. `output_dir` に推論後の音声を保存する出力先のディレクトリを指定する。
     3. `evaluate.py` を実行すると、指定されたディレクトリ内の音声を再帰的に検出し推論を行う。予測結果に基づき、出力ディレクトリ内に各ノート名のサブフォルダが作成され、音声ファイルが分類されて保存される。
@@ -39,4 +39,4 @@
     [dataset.py](/dataset.py) 内の `DrumDataset` クラスでは、前処理済みのテンソル情報を `.pt` 形式でキャッシュし、二回目以降の読み込みを高速化している。デフォルトではディレクトリが `./caches` になるが、その後に `_allnorm` などのサフィックスが付与されたディレクトリ名（例:`./caches_allnorm`）に出力される。変更が必要な場合は `get_dataloaders` の引数 `cache_dir` の値を変更することで指定可能である。
 *   **学習結果の出力先**:
     *   **モデルファイル**: `models/[model_ver]/bak/` 内にエポックごとの重みと情報（`.pth`, `_info.json`）が保存される。検証データでの損失が最小となった最良モデルは `models/[model_ver]/best.pth` および `best_info.json` としてディレクトリの直下に保存される。また、ネットワーク構造・重みの互換性を保つために [model.py](/model.py) が自動的に該当モデルのディレクトリへコピーされる。
-    *   **ログと可視化プロット**: `logs/YYYYMMDDHHMM/`[see](/logs/) ディレクトリ内に、トレーニングと検証のログファイル（`train_log.csv`, `val_log.csv`、`val_class_log.csv`）が保存される。さらに、損失・精度のグラフ（`training_metrics.png`）や、正規化された混同行列（`confusion_matrix.png`、`val_confusion_matrix.csv`）が出力される。過去のチェックポイント（`best_info.json`）が存在する状態から学習を再開する場合は、前回のログも引き継がれて追記される。
+    *   **ログと可視化プロット**: `logs/YYYYMMDDHHMM/`[🔗](/logs/) ディレクトリ内に、トレーニングと検証のログファイル（`train_log.csv`, `val_log.csv`、`val_class_log.csv`）が保存される。さらに、損失・精度のグラフ（`training_metrics.png`）や、正規化された混同行列（`confusion_matrix.png`、`val_confusion_matrix.csv`）が出力される。過去のチェックポイント（`best_info.json`）が存在する状態から学習を再開する場合は、前回のログも引き継がれて追記される。
