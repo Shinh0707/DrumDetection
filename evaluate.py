@@ -93,6 +93,13 @@ class Evaluater:
         print("-" * 80)
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Evaluate Drum Detection Model")
+    parser.add_argument("--model-ver", type=str, default="dualnorm_allnorm_v14", help="Model version name (e.g., dualnorm_allnorm_v14)")
+    parser.add_argument("-i", "--input", type=str, default="", help="Input directory containing audio files")
+    parser.add_argument("-o", "--output", type=str, default="", help="Output directory to save predictions")
+    args = parser.parse_args()
+
     # Device setup
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -108,12 +115,16 @@ if __name__ == "__main__":
     
     evaluater = Evaluater(model, device=device)
 
-    model_ver = "dualnorm_allnorm_v14" # 該当するモデルのバージョン名
+    model_ver = args.model_ver
     best_model_path = os.path.join("models", model_ver, "best.pth")
     evaluater.load_model(best_model_path)
     
     # ディレクトリの設定
-    input_dir = ""
-    output_dir = ""
+    input_dir = args.input
+    output_dir = args.output
     
-    evaluater.predict_dir(input_dir, output_dir)
+    if input_dir and output_dir:
+        evaluater.predict_dir(input_dir, output_dir)
+    else:
+        print("Please provide --input and --output arguments.")
+        parser.print_help()

@@ -21,20 +21,28 @@
 
 ## 推論の実行 ([evaluate.py](evaluate.py))
 
-推論処理は [evaluate.py](evaluate.py) にて実行される。推論の実行時には読み込むモデルのバージョンと、入出力ディレクトリを指定する。
+推論処理は [evaluate.py](evaluate.py) にて実行される。推論の実行時にはコマンドライン引数で読み込むモデルのバージョンと、入出力ディレクトリを指定する。
 
-*   **推論の実行・モデル指定方法**: 
-    ファイル末尾の `if __name__ == "__main__":` ブロック内で、変数 `model_ver` に読み込みたいモデルのバージョン名(models以下)（例: `dualnorm_allnorm_v14`[🔗](/models/dualnorm_allnorm_v14)）を指定する。これにより、`models/[バージョン名]/best.pth` が自動的にロードされる。
-    1. 同一ブロック内の `input_dir` に推論対象の音声が含まれるディレクトリパスを指定する。
-    2. `output_dir` に推論後の音声を保存する出力先のディレクトリを指定する。
-    3. `evaluate.py` を実行すると、指定されたディレクトリ内の音声を再帰的に検出し推論を行う。予測結果に基づき、出力ディレクトリ内に各ノート名のサブフォルダが作成され、音声ファイルが分類されて保存される。
+*   **コマンドラインからの実行方法**: 
+    以下のコマンドを使用して、推論対象のディレクトリ (`-i` または `--input`) と、予測結果を保存するディレクトリ (`-o` または `--output`)、およびモデルバージョン (`--model-ver`) を指定する。モデルバージョンを省略した場合はデフォルトで `dualnorm_allnorm_v14` が使用される。
+
+    ```bash
+    python evaluate.py --model-ver dualnorm_allnorm_v14 -i /path/to/input_audio -o /path/to/output_predicts
+    ```
+
+    1. `evaluate.py` を実行すると、指定されたディレクトリ内の音声を再帰的に検出し推論を行う。
+    2. 予測結果に基づき、出力ディレクトリ内に各ノート名のサブフォルダが作成され、音声ファイルが分類されて保存される。
 
 ## 学習の実行 ([dataset.py](/dataset.py), [train.py](train.py))
 
 学習やデータセットの準備は [dataset.py](/dataset.py) および [train.py](train.py) により管理されている。
 
-*   **学習データの指定**:
-    [train.py](train.py) の実行ブロック内で、`get_dataloaders(data_dir="学習データのディレクトリパス", ...)` の引数 `data_dir` に、学習用音声データが格納されているディレクトリを指定する。
+*   **コマンドラインからの実行方法**:
+    以下のコマンドを使用して、学習用音声データが格納されているディレクトリ (`-d` または `--data-dir`) と、モデルバージョン (`--model-ver`)、エポック数 (`--epochs`) を指定する。モデルバージョンやエポック数を省略した場合はデフォルト値が使用される。
+
+    ```bash
+    python train.py --model-ver dualnorm_allnorm_v14 -d /path/to/training_data --epochs 100
+    ```
 *   **学習データキャッシュ名の指定**:
     [dataset.py](/dataset.py) 内の `DrumDataset` クラスでは、前処理済みのテンソル情報を `.pt` 形式でキャッシュし、二回目以降の読み込みを高速化している。デフォルトではディレクトリが `./caches` になるが、その後に `_allnorm` などのサフィックスが付与されたディレクトリ名（例:`./caches_allnorm`）に出力される。変更が必要な場合は `get_dataloaders` の引数 `cache_dir` の値を変更することで指定可能である。
 *   **学習結果の出力先**:

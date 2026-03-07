@@ -409,8 +409,15 @@ def analyze_logs(log_dir):
         print("Action: if not true => you refine model archtecture")
         
 if __name__ == "__main__":
-    model_ver = "dualnorm_allnorm_v14"
-    num_epochs = 100
+    import argparse
+    parser = argparse.ArgumentParser(description="Train Drum Detection Model")
+    parser.add_argument("--model-ver", type=str, default="dualnorm_allnorm_v14", help="Model version name (e.g., dualnorm_allnorm_v14)")
+    parser.add_argument("-d", "--data-dir", type=str, default="", help="Directory containing training audio files")
+    parser.add_argument("--epochs", type=int, default=100, help="Number of epochs to train")
+    args = parser.parse_args()
+
+    model_ver = args.model_ver
+    num_epochs = args.epochs
     # Device setup
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -420,7 +427,7 @@ if __name__ == "__main__":
         device = torch.device("cpu")
     
     print("Initializing components...")
-    train_loader, val_loader = get_dataloaders(data_dir="",batch_size=32, val_split=0.2)
+    train_loader, val_loader = get_dataloaders(data_dir=args.data_dir,batch_size=32, val_split=0.2)
     
     model = DrumResNet().to(device)
     criterion = nn.CrossEntropyLoss(label_smoothing=0.08)
