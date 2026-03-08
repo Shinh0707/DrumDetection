@@ -217,9 +217,9 @@ __marimo__/
 .streamlit/secrets.toml
 caches*/
 test/
-sorted_output/
+test_out/
 .hidden
 models/*
-!models/dualnorm_allnorm_v14/
+!models/v6/
 logs/*
-!logs/202603071528/
+!logs/202603081047

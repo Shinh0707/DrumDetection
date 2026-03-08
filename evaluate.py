@@ -62,8 +62,8 @@ class Evaluater:
         # サブディレクトリを含めて .wav と .mp3 を再帰的に取得
         audio_files = list(input_path.rglob("*.wav")) + list(input_path.rglob("*.mp3"))
         
-        # 出力先の predicts フォルダ自体を読み込んで無限ループになるのを防ぐ
-        audio_files = [f for f in audio_files if "predicts" not in f.parts]
+        # 出力先のフォルダ自体を読み込んで無限ループになるのを防ぐ
+        audio_files = [f for f in audio_files if os.path.dirname(output_dir) not in f.parts]
         
         for file_path in audio_files:
             file_path_str = str(file_path)
@@ -95,7 +95,7 @@ class Evaluater:
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Evaluate Drum Detection Model")
-    parser.add_argument("--model-ver", type=str, default="dualnorm_allnorm_v14", help="Model version name (e.g., dualnorm_allnorm_v14)")
+    parser.add_argument("--model-ver", type=str, default="v6", help="Model version name (e.g., v6)")
     parser.add_argument("-i", "--input", type=str, default="", help="Input directory containing audio files")
     parser.add_argument("-o", "--output", type=str, default="", help="Output directory to save predictions")
     args = parser.parse_args()

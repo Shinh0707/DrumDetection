@@ -1,4 +1,4 @@
-# 120bpm 4/4 1note/mesure C1,C#1,D1,E1,F1,F#1,G1,G#1,A1,A#1,B1,C2,C#2,D2,D#2
+# 120bpm 4/4 1note/mesure C1,C#1,D1,D#1,E1,F1,F#1,G1,G#1,A1,A#1,B1,C2,C#2,D2,D#2
 # Melspectrogram (PyTorch,MelSpec) : Class (note) Onehot
 # ./caches/[filename].csv <-- MelSpec計算するたびに保存 (Melspec...(time flatten),Class(index))
 # Dataset: Reconstruct -> (MelSpec(time*bins),Class) (-> cross entropy)
@@ -17,7 +17,7 @@ from collections import defaultdict
 
 # Map notes to class indices
 CLASSES = [
-    "C1", "C#1", "D1", "E1", "F1", "F#1", "G1", "G#1", "A1", "A#1", "B1", "C2", "C#2", "D2", "D#2"
+    "C1", "C#1", "D1", "D#1", "E1", "F1", "F#1", "G1", "G#1", "A1", "A#1", "B1", "C2", "C#2", "D2", "D#2"
 ]
 NUM_CLASSES = len(CLASSES)
 
@@ -100,7 +100,7 @@ class DrumDataset(Dataset):
         """
         self.data_dir = data_dir
         # We append a suffix to the cache dir to avoid loading caches from older transform versions.
-        self.cache_dir = cache_dir + "_allnorm"
+        self.cache_dir = cache_dir
         self.sample_rate = sample_rate
         self.duration = duration
         self.augment = augment
